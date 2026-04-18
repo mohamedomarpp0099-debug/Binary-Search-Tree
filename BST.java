@@ -27,13 +27,13 @@ public class BST {
     public void insertion(int data){
         Node newNode=new Node(data);
         
-        if(root==null){   //حاله انها لسه اول نود  
+        if(root==null){
             root=newNode;
             return;
         }
         
-        Node current=root; // بوينتر يمشي ع العناصر
-        Node parent=null;   // بوينتر اخر يقف عند العنصر اللي هتضيف بعده
+        Node current=root;
+        Node parent=null;
         
         while(current!=null){
             parent=current;
@@ -41,13 +41,13 @@ public class BST {
             if(data<current.data) current=current.left;
             else if(data>current.data) current=current.right;
             else return;
-        } // بعد ما تخرج من اللوب كده البوينتر بيرنت واقف عند النود اللي هتضيف بعدها 
+        } 
         if (data<parent.data) parent.left=newNode;
         else if(data>parent.data) parent.right=newNode;
         
     }
     public boolean search(int value){
-        if(root==null) return false; // empty
+        if(root==null) return false;
         
         Node current=root;
         while(current!=null){
@@ -62,13 +62,13 @@ public class BST {
     public void delete(int value){
         Node current=root;
         Node parent=null;
-        // اللوب دي عشان نلاقي النود اللي هتتمسح
+        
         while(current!=null&&current.data!=value){
             parent=current;
             if(value<current.data) current=current.left;
             else current=current.right;
         }
-        //عنصر م موجود لأن البوينتر وصل للاخر 
+         
         if (current==null) return;
         
         // case 1 : no children
@@ -78,16 +78,14 @@ public class BST {
             else parent.right=null;
         }
         
-        // case 2 : one child                          // الشرط داا عشان تعرف ان مفيش اطفال تاني
-        else if(current.left==null || current.right==null){ //   غير دا لأن الكرنت بعد البيرنت  
+        // case 2 : one child                         
+        else if(current.left==null || current.right==null){ 
             Node child;
-            // عشان نحدد الطفل 
             if(current.left!=null)
                 child=current.left;
             else
                 child=current.right;
            
-            // هنا هتمسح
             if(current==root)root=child;
             else if(parent.left==current)parent.left=child;
             else parent.right=child;
@@ -95,26 +93,62 @@ public class BST {
         else{  // case 3 : 2 child
             Node successor=current.right;
             Node successorParent=current;
-            // اصغر قيمه في اليمين
             while (successor.left!=null){
                 successorParent=successor;
                 successor=successor.left;
             }
-            // نبدل 
             current.data=successor.data;
             
-            // نمسح ال successor
             if(successorParent.left==successor) successorParent.left=successor.right;
             else successorParent.right=successor.right;
         }   
     }
-    public void display(){ // by recursion
-        displayhelper(root);
+
+    // 3 Traversal by recursion
+    public void inOrderTraversal(){ 
+        System.out.println("");
+        inOrderTraversalHelper(root);
     }
-    private void displayhelper(Node root){
+    private void inOrderTraversalHelper(Node root){
         if(root==null) return;
-        displayhelper(root.left);
-        System.out.println(root.data+"");
-        displayhelper(root.right);
+        inOrderTraversalHelper(root.left);
+        System.out.print(root.data+" ");
+        inOrderTraversalHelper(root.right);
+    }
+    public void PreOrderTraversal(){
+        System.out.println("");
+        PreOrderTraversalHelper(root);
+    }
+    private void PreOrderTraversalHelper(Node root){
+        if(root==null) return;
+        System.out.print(root.data+" ");
+        PreOrderTraversalHelper(root.left);
+        PreOrderTraversalHelper(root.right);
+    }
+    public void PostOrderTraversal(){
+        System.out.println("");
+        PostOrderTraversalHelper(root);
+    }
+    private void PostOrderTraversalHelper(Node root){
+        if(root==null) return;
+        PostOrderTraversalHelper(root.left);
+        PostOrderTraversalHelper(root.right);
+        System.out.print(root.data+" ");
+    }
+    public int findmin(){
+        Node current=root;
+        if(current.left==null&&current.right==null) return root.data;
+        while(current.left!=null){
+            current=current.left;
+        }
+        return current.data;
+    }
+    public int findMax(){
+        Node current=root;
+        if(current.right==null&&current.left==null) return root.data;
+        while(current.right!=null){
+            current=current.right;
+        }
+        return current.data;
     }
 }
